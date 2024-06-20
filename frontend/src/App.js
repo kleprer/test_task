@@ -1,3 +1,4 @@
+import './App.css';
 import React, {useState, useEffect} from 'react';
 import {Icon} from 'react-icons-kit';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
