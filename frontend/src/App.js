@@ -118,17 +118,14 @@ const fetchClients = async (user, user_password) => {
                   <td className="p-[5px] border-[2px] border-black">{client.middle_name}</td>
                   <td className="p-[5px] border-[2px] border-black">{client.birthday}</td>
                   <td className="p-[5px] border-[2px] border-black">{client.itn}</td>
-                  
-                    <td className="p-[5px] border-[2px] border-black">
+                  <td className="p-[5px] border-[2px] border-black">
                       <Dropdown className="bg-white fixed w-[125px] flex border-black border-[2px] items-end" label={client.status} dismissOnClick={true} inline>
                         <Dropdown.Item className="bg-white w-full p-[4px] text-[15px]" onClick={() => handleSelect("Не в работе", client.id)}>Не в работе</Dropdown.Item>
                         <Dropdown.Item className="bg-white w-full p-[4px] text-[15px]" onClick={() => handleSelect("В работе", client.id)}>В работе</Dropdown.Item>
                         <Dropdown.Item className="bg-white w-full p-[4px] text-[15px]" onClick={() => handleSelect("Отказ", client.id)}>Отказ</Dropdown.Item>
                         <Dropdown.Item className="bg-white w-full p-[4px] text-[15px]" onClick={() => handleSelect("Сделка закрыта", client.id)}>Сделка закрыта</Dropdown.Item>
                       </Dropdown>
-                    </td>
-                    
-                  
+                  </td>
                 </tr>
               })}
              
