@@ -51,14 +51,8 @@ pip install -r requirements.txt
 ## Запустите на localhost 
 
 Внутри папки frontend:
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+npm start
 ```
 Oткройте [http://localhost:3000](http://localhost:3000) в браузере, чтобы увидеть результат.
 
