@@ -9,6 +9,7 @@ import api from './api';
 
 
 function App() {
+  
   const [clients, setClients] = useState([]);
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
@@ -17,65 +18,64 @@ function App() {
   const [status, setStatus] = useState("Не в работе");
   const [cId, setCId] = useState(0);
 
+
   const handleToggle = () => {
     if (type==='password'){
-       setIcon(eye);
-       setType('text')
+        setIcon(eye);
+        setType('text')
     } else {
-       setIcon(eyeOff)
-       setType('password')
+        setIcon(eyeOff)
+        setType('password')
     }
- }
-
- const handleSubmit = (e) => {
-  e.preventDefault();
-  fetchClients(login, password);
-  
- }
-
-
-const fetchClients = async (user, user_password) => {
-  if (clients != [] && login !== '' && password !== '') {
-    const response = await api.get(`/${user}/clients/`, {params: {
-      password: user_password
-    }})
-    setClients(response.data);
-  } else {
-    setClients([]);
   }
-  
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchClients(login, password);
   }
+
+
+  const fetchClients = async (user, user_password) => {
+    if (clients != [] && login !== '' && password !== '') {
+      const response = await api.get(`/${user}/clients/`, {params: {
+        password: user_password
+      }})
+      setClients(response.data);
+    } else {
+      setClients([]);
+    }
+    
+    }
 
  
  
- const fetchUpdateClient = async (clientId, clientNewStatus) => {
-  if (clientId !== 0 && clientNewStatus !== '' && clients != []) {
-  const response = await api.get(`/clients/${clientId}`, {params: {
-    status: clientNewStatus
-  }
-  })
-  setCId(clientId);
-  setStatus(clientNewStatus);
-  const updatedClient = response.data;
-  const index = clients.indexOf(updatedClient);
-  if (index > -1) {
-    clients.splice(index, 0, updatedClient);
-  }
-  setClients(clients);
-}}
+  const fetchUpdateClient = async (clientId, clientNewStatus) => {
+    if (clientId !== 0 && clientNewStatus !== '' && clients != []) {
+      const response = await api.get(`/clients/${clientId}`, {params: {
+        status: clientNewStatus
+      }})
+      setCId(clientId);
+      setStatus(clientNewStatus);
+      const updatedClient = response.data;
+      const index = clients.indexOf(updatedClient);
+      if (index > -1) {
+        clients.splice(index, 0, updatedClient);
+      }
+      setClients(clients);
+  }}
  
- const handleSelect =  (newStatus, id) => {
-  fetchUpdateClient(id, newStatus);
-  fetchClients(login, password);
- }
- useEffect(() => {
-  fetchUpdateClient(cId, status);
-  
- },[]) // eslint-disable-line react-hooks/exhaustive-deps
+  const handleSelect =  (newStatus, id) => {
+    fetchUpdateClient(id, newStatus);
+    fetchClients(login, password);
+  }
+  useEffect(() => {
+    fetchUpdateClient(cId, status);
+  },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
- useEffect(() => {
-  fetchClients(login, password);
- }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    fetchClients(login, password);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
@@ -134,6 +134,7 @@ const fetchClients = async (user, user_password) => {
       </table>
       </div>
   );
+  
 }
 
 export default App;
