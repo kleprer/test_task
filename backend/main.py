@@ -1,9 +1,8 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, Depends
 from typing import Annotated, List
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from database import new_session, engine
-import models
+import user_models, client_models
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -21,72 +20,45 @@ app.add_middleware(
 
 )
 
-class UserBase(BaseModel):
-    full_name: str
-    login: str
-    password: str
-
-class UserModel(UserBase):
-    id: int
-
-    class Config: 
-        from_attributes = True
-
-class ClientBase(BaseModel):
-    account_number: int
-    first_name: str
-    last_name: str
-    middle_name: str
-    birthday: str
-    itn: int
-    user_in_charge: str
-    status: str
-
-class ClientModel(ClientBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
 def get_db():
     db = new_session()
     try:
         yield db
     finally:
         db.close()
-    
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-models.Base.metadata.create_all(bind = engine)
+user_models.Base.metadata.create_all(bind = engine)
+client_models.Base.metadata.create_all(bind = engine)
 
-@app.post("/users/", response_model=UserModel)
-async def create_user(user: UserBase, db: db_dependency):
-    db_user = models.User(**user.dict())
+@app.post("/users/", response_model=user_models.UserModel)
+async def create_user(user: user_models.UserBase, db: db_dependency):
+    db_user = user_models.User(**user.dict())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-@app.post("/{user}/clients/", response_model=ClientModel)
-async def create_client(user: str, client: ClientBase, db: db_dependency):
-    db_client = models.Client(**client.dict())
+@app.post("/{user}/clients/", response_model=client_models.ClientModel)
+async def create_client(user: str, client: client_models.ClientBase, db: db_dependency):
+    db_client = client_models.Client(**client.dict())
     db.add(db_client)
     db.commit()
     db.refresh(db_client)
     return db_client
 
-@app.get("/users/", response_model=List[UserModel])
+@app.get("/users/", response_model=List[user_models.UserModel])
 async def get_users(db: db_dependency):
-    users = db.query(models.User).all()
+    users = db.query(user_models.User).all()
     return users
 
-@app.get("/{user}/clients/", response_model=List[ClientModel])
+@app.get("/{user}/clients/", response_model=List[client_models.ClientModel])
 async def get_clients(user: str, password: str, db: db_dependency):
     user_clients = []
-    clients = db.query(models.Client).all()
-    users = db.query(models.User).all()
+    clients = db.query(client_models.Client).all()
+    users = db.query(user_models.User).all()
     the_user = ''
     for u in users:
         if u.login == user and u.password == password:
@@ -98,10 +70,10 @@ async def get_clients(user: str, password: str, db: db_dependency):
     return user_clients
 
 
-@app.get("/clients/{client_id}", response_model=ClientModel)
+@app.get("/clients/{client_id}", response_model=client_models.ClientModel)
 async def get_client_by_id(client_id: int, status: str, db: db_dependency):
     the_client = {}
-    clients = db.query(models.Client).all()
+    clients = db.query(client_models.Client).all()
     for c in clients:
         if c.id == client_id:
             the_client = c
