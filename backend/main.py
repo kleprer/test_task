@@ -35,7 +35,7 @@ client_models.Base.metadata.create_all(bind = engine)
 
 @app.post("/users/", response_model=user_models.UserModel)
 async def create_user(user: user_models.UserBase, db: db_dependency):
-    db_user = user_models.User(**user.dict())
+    db_user = user_models.User(**user.model_dump())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -43,7 +43,7 @@ async def create_user(user: user_models.UserBase, db: db_dependency):
 
 @app.post("/{user}/clients/", response_model=client_models.ClientModel)
 async def create_client(user: str, client: client_models.ClientBase, db: db_dependency):
-    db_client = client_models.Client(**client.dict())
+    db_client = client_models.Client(**client.model_dump())
     db.add(db_client)
     db.commit()
     db.refresh(db_client)
