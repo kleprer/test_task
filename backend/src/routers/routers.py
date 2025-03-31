@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
-import user_models, client_models
+import backend.src.models.user_models as user_models, backend.src.models.client_models as client_models
 from typing import Annotated, List
 from sqlalchemy.orm import Session
-from database import new_session, engine
+from backend.src.db.database import new_session, engine
 
 router = APIRouter()
 
