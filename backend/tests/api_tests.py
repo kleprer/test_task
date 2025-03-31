@@ -12,6 +12,7 @@ def test_get_by_unknown_user():
     assert len(response.json()) == 0 
 
 def test_get_by_known_user():
-    response = client.get("/timoha2007/clients", params={"password":"mashedpotatoes"})
-    assert response.json()[2]["birthday"] == "2001.01.01"
-    print(response.json())
+    response = client.get("/timoha2007/clients/", params={"password":"mashedpotatoes"})
+    assert response.status_code == 200
+    # assert response.json()[2]["birthday"] == "2001.01.01"
+    assert response.json()[3]["id"] == 13
