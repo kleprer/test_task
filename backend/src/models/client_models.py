@@ -1,4 +1,4 @@
-from backend.src.db.database import Base
+from db.database import Base
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, ForeignKey
 
