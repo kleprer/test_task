@@ -56,7 +56,7 @@ npm start
 ```
 Oткройте [http://localhost:3000](http://localhost:3000) в браузере, чтобы увидеть результат.
 
-Внутри папки backend:
+Внутри папки backend.src:
 ```
 uvicorn main:app --reload
 ```
